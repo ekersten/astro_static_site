@@ -1,0 +1,218 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { getCollection } from 'astro:content';
+
+// Get all blog posts
+const allPosts = await getCollection('blog');
+const posts = allPosts
+  .filter(post => post.data.published !== false)
+  .sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime())
+  .map(post => ({
+    ...post.data,
+    slug: post.slug
+  }));
+---
+
+<Layout>
+  <main>
+    <div class="header">
+      <h1>Blog</h1>
+      <p>Welcome to my blog! Here you'll find all my latest posts.</p>
+      <a href="/admin" class="admin-link">✏️ Admin</a>
+    </div>
+    
+    <div class="posts">
+      {posts.length === 0 ? (
+        <div class="no-posts">
+          <p>No blog posts yet. <a href="/admin">Create your first post!</a></p>
+        </div>
+      ) : (
+        posts.map(post => (
+          <article class="post-preview">
+            {post.cover && (
+              <div class="post-image">
+                <img src={post.cover} alt={post.title} />
+              </div>
+            )}
+            <div class="post-content">
+              <h2>
+                <a href={`/blog/${post.slug}`}>{post.title}</a>
+              </h2>
+              {post.date && (
+                <div class="post-date">
+                  {new Date(post.date).toLocaleDateString('en-US', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                  })}
+                </div>
+              )}
+              {post.excerpt && (
+                <p class="post-excerpt">{post.excerpt}</p>
+              )}
+              {post.tags && post.tags.length > 0 && (
+                <div class="post-tags">
+                  {post.tags.map(tag => (
+                    <span class="tag">{tag}</span>
+                  ))}
+                </div>
+              )}
+              <a href={`/blog/${post.slug}`} class="read-more">Read more →</a>
+            </div>
+          </article>
+        ))
+      )}
+    </div>
+  </main>
+</Layout>
+
+<style>
+  main {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 2rem;
+    font-family: Arial, sans-serif;
+  }
+  
+  .header {
+    text-align: center;
+    margin-bottom: 3rem;
+    position: relative;
+  }
+  
+  .header h1 {
+    font-size: 2.5rem;
+    color: #333;
+    margin-bottom: 0.5rem;
+  }
+  
+  .header p {
+    color: #666;
+    font-size: 1.1rem;
+  }
+  
+  .admin-link {
+    position: absolute;
+    top: 0;
+    right: 0;
+    background: #007acc;
+    color: white;
+    padding: 0.5rem 1rem;
+    text-decoration: none;
+    border-radius: 4px;
+    font-size: 0.9rem;
+    transition: background-color 0.3s;
+  }
+  
+  .admin-link:hover {
+    background: #0056a3;
+  }
+  
+  .no-posts {
+    text-align: center;
+    padding: 4rem 2rem;
+    color: #666;
+  }
+  
+  .no-posts a {
+    color: #007acc;
+    text-decoration: none;
+  }
+  
+  .no-posts a:hover {
+    text-decoration: underline;
+  }
+  
+  .posts {
+    display: grid;
+    gap: 2rem;
+  }
+  
+  .post-preview {
+    border: 1px solid #e1e5e9;
+    border-radius: 8px;
+    overflow: hidden;
+    transition: box-shadow 0.3s;
+  }
+  
+  .post-preview:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+  
+  .post-image img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+  }
+  
+  .post-content {
+    padding: 1.5rem;
+  }
+  
+  .post-content h2 {
+    margin: 0 0 0.5rem 0;
+    font-size: 1.5rem;
+  }
+  
+  .post-content h2 a {
+    color: #333;
+    text-decoration: none;
+  }
+  
+  .post-content h2 a:hover {
+    color: #007acc;
+  }
+  
+  .post-date {
+    color: #666;
+    font-size: 0.9rem;
+    margin-bottom: 1rem;
+  }
+  
+  .post-excerpt {
+    color: #555;
+    line-height: 1.6;
+    margin-bottom: 1rem;
+  }
+  
+  .post-tags {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+    flex-wrap: wrap;
+  }
+  
+  .tag {
+    background: #f0f0f0;
+    color: #333;
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    font-size: 0.8rem;
+  }
+  
+  .read-more {
+    color: #007acc;
+    text-decoration: none;
+    font-weight: 500;
+  }
+  
+  .read-more:hover {
+    text-decoration: underline;
+  }
+  
+  @media (max-width: 768px) {
+    .header {
+      text-align: left;
+    }
+    
+    .admin-link {
+      position: static;
+      display: inline-block;
+      margin-top: 1rem;
+    }
+    
+    main {
+      padding: 1rem;
+    }
+  }
+</style>

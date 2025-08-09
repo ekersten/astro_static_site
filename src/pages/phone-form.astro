@@ -1,0 +1,184 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout>
+    <main>
+        <h1>Phone Number Notification</h1>
+        <p>Enter a phone number to send an email notification:</p>
+        
+        <form id="phoneForm">
+            <div class="form-group">
+                <label for="phoneNumber">Phone Number:</label>
+                <input 
+                    type="tel" 
+                    id="phoneNumber" 
+                    name="phoneNumber" 
+                    placeholder="+1234567890" 
+                    required
+                />
+            </div>
+            <button type="submit">Send Notification</button>
+        </form>
+        
+        <div id="result" class="hidden"></div>
+    </main>
+</Layout>
+
+<style>
+    main {
+        max-width: 600px;
+        margin: 2rem auto;
+        padding: 2rem;
+        font-family: Arial, sans-serif;
+    }
+    
+    h1 {
+        color: #333;
+        text-align: center;
+        margin-bottom: 1rem;
+    }
+    
+    p {
+        color: #666;
+        text-align: center;
+        margin-bottom: 2rem;
+    }
+    
+    .form-group {
+        margin-bottom: 1.5rem;
+    }
+    
+    label {
+        display: block;
+        margin-bottom: 0.5rem;
+        font-weight: bold;
+        color: #333;
+    }
+    
+    input[type="tel"] {
+        width: 100%;
+        padding: 0.75rem;
+        border: 2px solid #ddd;
+        border-radius: 4px;
+        font-size: 1rem;
+        box-sizing: border-box;
+    }
+    
+    input[type="tel"]:focus {
+        outline: none;
+        border-color: #007acc;
+    }
+    
+    button {
+        width: 100%;
+        padding: 0.75rem;
+        background-color: #007acc;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        font-size: 1rem;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+    
+    button:hover {
+        background-color: #0056a3;
+    }
+    
+    button:disabled {
+        background-color: #ccc;
+        cursor: not-allowed;
+    }
+    
+    #result {
+        margin-top: 2rem;
+        padding: 1rem;
+        border-radius: 4px;
+        text-align: center;
+    }
+    
+    .hidden {
+        display: none;
+    }
+    
+    .success {
+        background-color: #d4edda;
+        color: #155724;
+        border: 1px solid #c3e6cb;
+    }
+    
+    .error {
+        background-color: #f8d7da;
+        color: #721c24;
+        border: 1px solid #f5c6cb;
+    }
+    
+    .loading {
+        background-color: #d1ecf1;
+        color: #0c5460;
+        border: 1px solid #bee5eb;
+    }
+</style>
+
+<script>
+    const form = document.getElementById('phoneForm');
+    const result = document.getElementById('result');
+    const submitButton = form.querySelector('button[type="submit"]');
+    
+    const SERVERLESS_URL = 'https://faas-nyc1-2ef2e6cc.doserverless.co/api/v1/web/fn-96ab7fcb-988d-466b-aa5c-e174ab5861b0/python-mailer/__main__';
+    
+    function showResult(message, type) {
+        result.textContent = message;
+        result.className = type;
+        result.classList.remove('hidden');
+    }
+    
+    function hideResult() {
+        result.classList.add('hidden');
+    }
+    
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        const phoneNumber = document.getElementById('phoneNumber').value.trim();
+        
+        if (!phoneNumber) {
+            showResult('Please enter a phone number', 'error');
+            return;
+        }
+        
+        // Show loading state
+        submitButton.disabled = true;
+        submitButton.textContent = 'Sending...';
+        showResult('Sending notification...', 'loading');
+        
+        try {
+            const response = await fetch(SERVERLESS_URL, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    phone_number: phoneNumber
+                })
+            });
+            
+            const responseText = await response.text();
+            
+            if (response.ok) {
+                showResult(`✅ ${responseText}`, 'success');
+                form.reset();
+            } else {
+                showResult(`❌ Error: ${responseText}`, 'error');
+            }
+            
+        } catch (error) {
+            showResult(`❌ Network error: ${error.message}`, 'error');
+        } finally {
+            // Reset button state
+            submitButton.disabled = false;
+            submitButton.textContent = 'Send Notification';
+        }
+    });
+</script>

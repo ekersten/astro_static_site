@@ -1,0 +1,222 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { getCollection } from 'astro:content';
+import type { CollectionEntry } from 'astro:content';
+
+export async function getStaticPaths() {
+  const allPosts = await getCollection('blog');
+  
+  return allPosts
+    .filter(post => post.data.published !== false)
+    .map(post => ({
+      params: { slug: post.slug },
+      props: { post }
+    }));
+}
+
+interface Props {
+  post: CollectionEntry<'blog'>;
+}
+
+const { post } = Astro.props;
+const { Content } = await post.render();
+---
+
+<Layout>
+  <main>
+    <article class="post">
+      <div class="post-header">
+        <div class="breadcrumb">
+          <a href="/blog">← Back to Blog</a>
+        </div>
+        
+        {post.data.cover && (
+          <div class="post-cover">
+            <img src={post.data.cover} alt={post.data.title} />
+          </div>
+        )}
+        
+        <h1>{post.data.title}</h1>
+        
+        <div class="post-meta">
+          {post.data.date && (
+            <div class="post-date">
+              📅 {new Date(post.data.date).toLocaleDateString('en-US', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+              })}
+            </div>
+          )}
+          
+          {post.data.tags && post.data.tags.length > 0 && (
+            <div class="post-tags">
+              {post.data.tags.map((tag: string) => (
+                <span class="tag">{tag}</span>
+              ))}
+            </div>
+          )}
+        </div>
+        
+        {post.data.excerpt && (
+          <div class="post-excerpt">
+            <em>{post.data.excerpt}</em>
+          </div>
+        )}
+      </div>
+      
+      <div class="post-content">
+        <Content />
+      </div>
+    </article>
+  </main>
+</Layout>
+
+<style>
+  main {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 2rem;
+    font-family: Arial, sans-serif;
+  }
+  
+  .breadcrumb {
+    margin-bottom: 2rem;
+  }
+  
+  .breadcrumb a {
+    color: #007acc;
+    text-decoration: none;
+    font-size: 0.9rem;
+  }
+  
+  .breadcrumb a:hover {
+    text-decoration: underline;
+  }
+  
+  .post-cover {
+    margin-bottom: 2rem;
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  
+  .post-cover img {
+    width: 100%;
+    height: 300px;
+    object-fit: cover;
+  }
+  
+  .post h1 {
+    font-size: 2.5rem;
+    color: #333;
+    margin-bottom: 1rem;
+    line-height: 1.2;
+  }
+  
+  .post-meta {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+  }
+  
+  .post-date {
+    color: #666;
+    font-size: 0.9rem;
+  }
+  
+  .post-tags {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+  
+  .tag {
+    background: #f0f0f0;
+    color: #333;
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    font-size: 0.8rem;
+  }
+  
+  .post-excerpt {
+    background: #f8f9fa;
+    padding: 1rem;
+    border-left: 4px solid #007acc;
+    margin-bottom: 2rem;
+    font-size: 1.1rem;
+    color: #555;
+  }
+  
+  .post-content {
+    line-height: 1.7;
+    color: #333;
+  }
+  
+  .post-content :global(h1),
+  .post-content :global(h2),
+  .post-content :global(h3) {
+    color: #333;
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+  }
+  
+  .post-content :global(h1) { font-size: 2rem; }
+  .post-content :global(h2) { font-size: 1.5rem; }
+  .post-content :global(h3) { font-size: 1.25rem; }
+  
+  .post-content :global(p) {
+    margin-bottom: 1rem;
+  }
+  
+  .post-content :global(a) {
+    color: #007acc;
+    text-decoration: none;
+  }
+  
+  .post-content :global(a:hover) {
+    text-decoration: underline;
+  }
+  
+  .post-content :global(code) {
+    background: #f4f4f4;
+    padding: 0.2rem 0.4rem;
+    border-radius: 3px;
+    font-family: 'Courier New', monospace;
+    font-size: 0.9em;
+  }
+  
+  .post-content :global(pre) {
+    background: #f4f4f4;
+    padding: 1rem;
+    border-radius: 6px;
+    overflow-x: auto;
+    margin: 1rem 0;
+  }
+  
+  .post-content :global(pre code) {
+    background: none;
+    padding: 0;
+  }
+  
+  .post-content :global(strong) {
+    font-weight: 600;
+  }
+  
+  @media (max-width: 768px) {
+    main {
+      padding: 1rem;
+    }
+    
+    .post h1 {
+      font-size: 2rem;
+    }
+    
+    .post-meta {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.5rem;
+    }
+  }
+</style>
