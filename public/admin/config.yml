@@ -3,7 +3,7 @@ backend:
   repo: "ekersten/astro_static_site" # The repository where the content
   branch: master # Branch to update (optional; defaults to master)
   base_url: "https://api.netlify.com" # Base URL for the GitHub API
-  site_domain: "walrus-app-t3ufs.ondigitalocean.app" # The domain of the site, used for redirects and links
+  site_domain: "coral-app-v39do.ondigitalocean.app" # The domain of the site, used for redirects and links
 
 # Uncomment below to enable drafts
 # publish_mode: editorial_workflow
