@@ -1,0 +1,27 @@
+function main(args) {
+    const clientId = process.env.OAUTH_CLIENT_ID;
+
+    // Get the namespace URL from the request
+    const namespace = process.env.__OW_NAMESPACE;
+    const apiHost = process.env.__OW_API_HOST;
+
+    // Construct callback URL
+    const callbackUrl = `${apiHost}/api/v1/web/${namespace}/oauth/callback`;
+
+    // GitHub OAuth authorization URL
+    const authUrl = new URL('https://github.com/login/oauth/authorize');
+    authUrl.searchParams.append('client_id', clientId);
+    authUrl.searchParams.append('redirect_uri', callbackUrl);
+    authUrl.searchParams.append('scope', 'repo,user');
+    authUrl.searchParams.append('state', args.state || '');
+
+    return {
+        statusCode: 302,
+        headers: {
+            'Location': authUrl.toString(),
+            'Cache-Control': 'no-cache'
+        }
+    };
+}
+
+exports.main = main;
