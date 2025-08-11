@@ -126,7 +126,8 @@ import Layout from "../layouts/Layout.astro"
   const result = document.getElementById("result")
   const submitButton = form.querySelector('button[type="submit"]')
 
-  const SERVERLESS_URL = process.env.MAILER_ENDPOINT
+  const SERVERLESS_URL = import.meta.env.PUBLIC_MAILER_ENDPOINT
+  alert(SERVERLESS_URL)
 
   function showResult(message, type) {
     result.textContent = message
