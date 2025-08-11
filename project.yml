@@ -1,47 +1,30 @@
-name: my-decap-site
-region: nyc
-static_sites:
-  - name: web
-    github:
-      repo: ekersten/astro_static_site
-      branch: main
-      deploy_on_push: true
-    build_command: npm run build
-    output_dir: /dist
-    routes:
-      - path: /
-    
-functions:
+targetNamespace: ''
+parameters: {}
+packages:
   - name: oauth
-    github:
-      repo: ekersten/astro_static_site
-      branch: main
-      deploy_on_push: true
-    source_dir: packages/oauth
-    routes:
-      - path: /oauth/auth
-      - path: /oauth/callback
-    envs:
-      - key: OAUTH_CLIENT_ID
-        value: ${OAUTH_CLIENT_ID}
-      - key: OAUTH_CLIENT_SECRET
-        value: ${OAUTH_CLIENT_SECRET}
-        type: SECRET
+    environment:
+      OAUTH_CLIENT_ID: ${OAUTH_CLIENT_ID}
+      OAUTH_CLIENT_SECRET: ${OAUTH_CLIENT_SECRET}
+    functions:
+      - name: auth
+        binary: false
+        main: ''
+        runtime: 'nodejs:18'
+        web: true
+      - name: callback
+        binary: false
+        main: ''
+        runtime: 'nodejs:18'
+        web: true
   - name: mailer
-    github:
-      repo: ekersten/astro_static_site
-      branch: main
-      deploy_on_push: true
-    source_dir: packages/mailer
-    routes:
-      - path: /api/mailer
-    envs:
-      - key: SMTP_HOST
-        value: ${SMTP_HOST}
-      - key: EMAIL_USER
-        value: ${EMAIL_USER}
-      - key: EMAIL_PASS
-        value: ${EMAIL_PASS}
-        type: SECRET
-      - key: NOTIFICATION_EMAIL
-        value: ${NOTIFICATION_EMAIL}
+    environment:
+      SMTP_HOST: ${SMTP_HOST}
+      EMAIL_USER: ${EMAIL_USER}
+      EMAIL_PASS: ${EMAIL_PASS}
+      NOTIFICATION_EMAIL: ${NOTIFICATION_EMAIL}
+    functions:
+      - name: __main__
+        binary: false
+        main: ''
+        runtime: 'python:3.9'
+        web: true
