@@ -6,7 +6,7 @@ function main(args) {
     const apiHost = process.env.__OW_API_HOST;
 
     // Construct callback URL
-    const callbackUrl = `${apiHost}/api/v1/web/${namespace}/oauth/callback`;
+    const callbackUrl = `https://astro-static-site-s3a28.ondigitalocean.app/api/v1/oauth/callback`;
 
     // GitHub OAuth authorization URL
     const authUrl = new URL('https://github.com/login/oauth/authorize');
