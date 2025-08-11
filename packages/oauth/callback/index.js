@@ -54,7 +54,7 @@ async function main(args) {
         // Get the namespace URL for callback
         const namespace = process.env.__OW_NAMESPACE;
         const apiHost = process.env.__OW_API_HOST;
-        const callbackUrl = `${apiHost}/api/v1/web/${namespace}/oauth/callback`;
+        const callbackUrl = `https://astro-static-site-s3a28.ondigitalocean.app/api/v1/oauth/callback`;
 
         // Exchange code for token
         const response = await exchangeCodeForToken(code, callbackUrl);
