@@ -3,7 +3,7 @@ backend:
   repo: "ekersten/astro_static_site" # The repository where the content
   branch: master # Branch to update (optional; defaults to master)
   base_url: "https://astro-static-site-s3a28.ondigitalocean.app" # Base URL for the GitHub API
-  auth_endpoint: "/api/v1/web/oauth/auth" # Custom auth endpoint
+  auth_endpoint: "/api/v1/oauth/auth" # Custom auth endpoint
 
 # Uncomment below to enable drafts
 # publish_mode: editorial_workflow
