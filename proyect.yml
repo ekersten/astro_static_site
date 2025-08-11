@@ -19,8 +19,8 @@ functions:
       deploy_on_push: true
     source_dir: packages/oauth
     routes:
-      - path: /api/oauth/auth
-      - path: /api/oauth/callback
+      - path: /oauth/auth
+      - path: /oauth/callback
     envs:
       - key: OAUTH_CLIENT_ID
         value: ${oauth.OAUTH_CLIENT_ID}
