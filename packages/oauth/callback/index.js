@@ -93,6 +93,7 @@ async function main(args) {
                     /*setTimeout(() => {
                         window.close();
                     }, 1000);*/
+                    alert('holis')
                 </script>
             </head>
             <body>
