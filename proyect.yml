@@ -23,9 +23,9 @@ functions:
       - path: /oauth/callback
     envs:
       - key: OAUTH_CLIENT_ID
-        value: ${oauth.OAUTH_CLIENT_ID}
+        value: ${OAUTH_CLIENT_ID}
       - key: OAUTH_CLIENT_SECRET
-        value: ${oauth.OAUTH_CLIENT_SECRET}
+        value: ${OAUTH_CLIENT_SECRET}
         type: SECRET
   - name: mailer
     github:
@@ -37,11 +37,11 @@ functions:
       - path: /api/mailer
     envs:
       - key: SMTP_HOST
-        value: ${mailer.SMTP_HOST}
+        value: ${SMTP_HOST}
       - key: EMAIL_USER
-        value: ${mailer.EMAIL_USER}
+        value: ${EMAIL_USER}
       - key: EMAIL_PASS
-        value: ${mailer.EMAIL_PASS}
+        value: ${EMAIL_PASS}
         type: SECRET
       - key: NOTIFICATION_EMAIL
-        value: ${mailer.NOTIFICATION_EMAIL}
+        value: ${NOTIFICATION_EMAIL}
