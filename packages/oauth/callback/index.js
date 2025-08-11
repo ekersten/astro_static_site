@@ -79,7 +79,7 @@ async function main(args) {
                     if (window.opener) {
                         window.opener.postMessage(
                             'authorization:github:success:' + JSON.stringify(authResponse),
-                            window.opener.location.origin
+                            '*'
                         );
                     }
                     
@@ -90,10 +90,9 @@ async function main(args) {
                     );
                     
                     // Close the window after a short delay
-                    /*setTimeout(() => {
+                    setTimeout(() => {
                         window.close();
-                    }, 1000);*/
-                    alert('holis')
+                    }, 1000);
                 </script>
             </head>
             <body>
