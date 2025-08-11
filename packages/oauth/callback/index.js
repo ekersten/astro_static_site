@@ -125,7 +125,7 @@ async function main(args) {
                 <body style="text-align: center; padding: 50px; font-family: sans-serif;">
                     <h1>❌ Authentication Failed</h1>
                     <p>Error: ${error.message}</p>
-                    <p><a href="${process.env.SITE_URL}/admin/">Try again</a></p>
+                    <p><a href="https://astro-static-site-s3a28.ondigitalocean.app/admin/">Try again</a></p>
                 </body>
                 </html>
             `
