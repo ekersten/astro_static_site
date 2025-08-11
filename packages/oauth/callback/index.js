@@ -90,9 +90,9 @@ async function main(args) {
                     );
                     
                     // Close the window after a short delay
-                    setTimeout(() => {
+                    /*setTimeout(() => {
                         window.close();
-                    }, 1000);
+                    }, 1000);*/
                 </script>
             </head>
             <body>
