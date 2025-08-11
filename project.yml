@@ -28,5 +28,3 @@ packages:
         main: ''
         runtime: 'python:3.9'
         web: true
-        methods:
-          - POST
