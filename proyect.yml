@@ -1,0 +1,47 @@
+name: my-decap-site
+region: nyc
+static_sites:
+  - name: web
+    github:
+      repo: ekersten/astro_static_site
+      branch: main
+      deploy_on_push: true
+    build_command: npm run build
+    output_dir: /dist
+    routes:
+      - path: /
+    
+functions:
+  - name: oauth
+    github:
+      repo: ekersten/astro_static_site
+      branch: main
+      deploy_on_push: true
+    source_dir: packages/oauth
+    routes:
+      - path: /api/oauth/auth
+      - path: /api/oauth/callback
+    envs:
+      - key: OAUTH_CLIENT_ID
+        value: ${oauth.OAUTH_CLIENT_ID}
+      - key: OAUTH_CLIENT_SECRET
+        value: ${oauth.OAUTH_CLIENT_SECRET}
+        type: SECRET
+  - name: mailer
+    github:
+      repo: ekersten/astro_static_site
+      branch: main
+      deploy_on_push: true
+    source_dir: packages/mailer
+    routes:
+      - path: /api/mailer
+    envs:
+      - key: SMTP_HOST
+        value: ${mailer.SMTP_HOST}
+      - key: EMAIL_USER
+        value: ${mailer.EMAIL_USER}
+      - key: EMAIL_PASS
+        value: ${mailer.EMAIL_PASS}
+        type: SECRET
+      - key: NOTIFICATION_EMAIL
+        value: ${mailer.NOTIFICATION_EMAIL}
