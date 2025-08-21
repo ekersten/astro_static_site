@@ -77,7 +77,7 @@ async function main(args) {
                     
                     // Post message to opener window (the CMS)
                     if (window.opener) {
-                        console.log('tengo opener)
+                        console.log('tengo opener')
                         window.opener.postMessage(
                             'authorization:github:success:' + JSON.stringify(authResponse),
                             '*'
