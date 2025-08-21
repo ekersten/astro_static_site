@@ -77,10 +77,15 @@ async function main(args) {
                     
                     // Post message to opener window (the CMS)
                     if (window.opener) {
+                        console.log('tengo opener)
                         window.opener.postMessage(
                             'authorization:github:success:' + JSON.stringify(authResponse),
                             '*'
                         );
+                        window.opener.postMessage({
+                            token: authResponse.token,
+                            provider: 'github' 
+                        }, window.location.origin);
                     }
                     
                     // Also try postMessage without opener (for some browsers)
@@ -90,9 +95,9 @@ async function main(args) {
                     );
                     
                     // Close the window after a short delay
-                    setTimeout(() => {
-                        window.close();
-                    }, 1000);
+                    // setTimeout(() => {
+                    //     window.close();
+                    // }, 1000);
                 </script>
             </head>
             <body>
