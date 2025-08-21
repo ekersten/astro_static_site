@@ -77,22 +77,11 @@ async function main(args) {
                     
                     // Post message to opener window (the CMS)
                     if (window.opener) {
-                        console.log('tengo opener')
-                        window.opener.postMessage(
-                            'authorization:github:success:' + JSON.stringify(authResponse),
-                            '*'
-                        );
                         window.opener.postMessage({
                             token: authResponse.token,
                             provider: 'github' 
-                        }, window.location.origin);
+                        }, 'https://astro-static-site-s3a28.ondigitalocean.app');
                     }
-                    
-                    // Also try postMessage without opener (for some browsers)
-                    window.postMessage(
-                        'authorization:github:success:' + JSON.stringify(authResponse),
-                        '*'
-                    );
                     
                     // Close the window after a short delay
                     // setTimeout(() => {
