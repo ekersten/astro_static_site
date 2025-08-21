@@ -51,10 +51,9 @@ async function main(args) {
     }
 
     try {
-        // Get the namespace URL for callback
-        const namespace = process.env.__OW_NAMESPACE;
-        const apiHost = process.env.__OW_API_HOST;
-        const callbackUrl = `https://astro-static-site-s3a28.ondigitalocean.app/api/v1/oauth/callback`;
+        // Get the callback URL for token exchange
+        const baseUrl = process.env.BASE_URL || 'https://astro-static-site-s3a28.ondigitalocean.app';
+        const callbackUrl = `${baseUrl}/api/v1/oauth/callback`;
 
         // Exchange code for token
         const response = await exchangeCodeForToken(code, callbackUrl);
@@ -75,18 +74,26 @@ async function main(args) {
                         provider: 'github'
                     };
                     
-                    // Post message to opener window (the CMS)
-                    if (window.opener) {
-                        window.opener.postMessage({
-                            token: authResponse.token,
-                            provider: 'github' 
-                        }, 'https://astro-static-site-s3a28.ondigitalocean.app');
+                    function receiveMessage(e) {
+                        console.log("receiveMessage %o", e);
+                        window.opener.postMessage(
+                            'authorization:github:success:' + JSON.stringify(authResponse),
+                            e.origin
+                        );
+                        window.removeEventListener("message", receiveMessage, false);
+                        // Close window after successful message
+                        setTimeout(() => {
+                            window.close();
+                        }, 1000);
                     }
                     
-                    // Close the window after a short delay
-                    // setTimeout(() => {
-                    //     window.close();
-                    // }, 1000);
+                    // Set up message listener and send initial message
+                    window.addEventListener("message", receiveMessage, false);
+                    
+                    // Send initial authorizing message to opener
+                    if (window.opener) {
+                        window.opener.postMessage("authorizing:github", "*");
+                    }
                 </script>
             </head>
             <body>
@@ -111,18 +118,43 @@ async function main(args) {
     } catch (error) {
         console.error('OAuth callback error:', error);
 
+        const errorHtml = `
+            <!DOCTYPE html>
+            <html>
+            <head>
+                <title>Authentication Failed</title>
+                <script>
+                    function receiveMessage(e) {
+                        console.log("receiveMessage %o", e);
+                        window.opener.postMessage(
+                            'authorization:github:error:' + JSON.stringify({error: '${error.message}'}),
+                            e.origin
+                        );
+                        window.removeEventListener("message", receiveMessage, false);
+                    }
+                    
+                    window.addEventListener("message", receiveMessage, false);
+                    
+                    if (window.opener) {
+                        window.opener.postMessage("authorizing:github", "*");
+                    }
+                </script>
+            </head>
+            <body style="text-align: center; padding: 50px; font-family: sans-serif;">
+                <h1>❌ Authentication Failed</h1>
+                <p>Error: ${error.message}</p>
+                <p><a href="${process.env.BASE_URL || 'https://astro-static-site-s3a28.ondigitalocean.app'}/admin/">Try again</a></p>
+            </body>
+            </html>
+        `;
+
         return {
             statusCode: 500,
-            headers: { 'Content-Type': 'text/html' },
-            body: `
-                <html>
-                <body style="text-align: center; padding: 50px; font-family: sans-serif;">
-                    <h1>❌ Authentication Failed</h1>
-                    <p>Error: ${error.message}</p>
-                    <p><a href="https://astro-static-site-s3a28.ondigitalocean.app/admin/">Try again</a></p>
-                </body>
-                </html>
-            `
+            headers: { 
+                'Content-Type': 'text/html',
+                'Cache-Control': 'no-cache, no-store, must-revalidate'
+            },
+            body: errorHtml
         };
     }
 }
