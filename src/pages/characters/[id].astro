@@ -1,0 +1,56 @@
+---
+import { getCollection } from "astro:content"
+import Layout from "../../layouts/Layout.astro"
+import { Image } from "astro:assets"
+
+export async function getStaticPaths() {
+  const allCharacters = await getCollection("characters")
+
+  return allCharacters.map((character) => ({
+    params: { id: character.id },
+    props: { character },
+  }))
+}
+
+const { character } = Astro.props
+---
+
+<Layout title={character.data.name}>
+  <p><a href="/characters">Characters</a></p>
+  <h1>{character.data.name}</h1>
+  <div class="character-details">
+    <Image
+      src={character.data.image}
+      alt={character.data.name}
+      width={200}
+      height={200}
+      class="character-image"
+    />
+    <div class="character-data">
+      <p><strong>Species:</strong> {character.data.species}</p>
+      <p><strong>Status:</strong> {character.data.status}</p>
+      <p><strong>Origin:</strong> {character.data.origin}</p>
+      <p><strong>Location:</strong> {character.data.location}</p>
+    </div>
+  </div>
+</Layout>
+
+<style>
+  .character-details {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+  }
+
+  .character-image {
+    border-radius: 50%;
+  }
+
+  .character-data {
+    max-width: 400px;
+  }
+
+  h1 {
+    margin-bottom: 1rem;
+  }
+</style>
