@@ -15,12 +15,20 @@ const blog = defineCollection({
 
 const characters = defineCollection({
     loader: async () => {
-        const response = await fetch('https://rickandmortyapi.com/api/character');
-        if (!response.ok) {
-            throw new Error('Failed to fetch characters');
+        const allCharacters: any[] = [];
+        let nextUrl = 'https://rickandmortyapi.com/api/character';
+        
+        while (nextUrl) {
+            const response = await fetch(nextUrl);
+            if (!response.ok) {
+                throw new Error('Failed to fetch characters');
+            }
+            const data = await response.json();
+            allCharacters.push(...data.results);
+            nextUrl = data.info.next;
         }
-        const data = await response.json();
-        return data.results.map((character: any) => ({
+        
+        return allCharacters.map((character: any) => ({
             id: slug(character.name, { lower: true }),
             name: character.name,
             image: character.image,
