@@ -16,8 +16,14 @@ const { character } = Astro.props
 ---
 
 <Layout title={character.data.name}>
-  <p><a href="/characters">Characters</a></p>
-  <h1>{character.data.name}</h1>
+  <p>
+    <a
+      href="/characters"
+      class="font-lubrifont text-gray-600 relative left-0 hover:underline hover:left-1 transition-all duration-200"
+      >&lt; Characters</a
+    >
+  </p>
+  <h1 class="main-title">{character.data.name}</h1>
   <div class="character-details">
     <Image
       src={character.data.image}
@@ -25,6 +31,7 @@ const { character } = Astro.props
       width={200}
       height={200}
       class="character-image"
+      transition:name={`img-${character.id}`}
     />
     <div class="character-data">
       <p><strong>Species:</strong> {character.data.species}</p>
@@ -35,7 +42,8 @@ const { character } = Astro.props
   </div>
 </Layout>
 
-<style>
+<style lang="postcss">
+  @reference "../../styles/global.css";
   .character-details {
     display: flex;
     align-items: center;
@@ -43,14 +51,19 @@ const { character } = Astro.props
   }
 
   .character-image {
-    border-radius: 0.4rem;
+    @apply rounded-md border-8 border-white;
   }
 
   .character-data {
-    max-width: 400px;
+    @apply font-lubrifont text-gray-600 text-2xl;
+
+    p {
+      @apply hover:scale-110 transition-transform duration-200;
+    }
+    
+    strong {
+      @apply text-gray-800;
+    }
   }
 
-  h1 {
-    margin-bottom: 1rem;
-  }
 </style>

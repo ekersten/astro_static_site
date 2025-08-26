@@ -1,1 +1,28 @@
+@import url('https://fonts.googleapis.com/css2?family=WDXL+Lubrifont+TC&display=swap');
 @import "tailwindcss";
+
+@theme {
+    /* fonts */
+    --font-lubrifont: 'WDXL Lubrifont TC', sans-serif;
+
+    /* colors */
+    --color-dodger-blue-50: #edfcff;
+    --color-dodger-blue-100: #d6f7ff;
+    --color-dodger-blue-200: #b5f3ff;
+    --color-dodger-blue-300: #83eeff;
+    --color-dodger-blue-400: #48e1ff;
+    --color-dodger-blue-500: #1ec7ff;
+    --color-dodger-blue-600: #06acff;
+    --color-dodger-blue-700: #0099ff;
+    --color-dodger-blue-800: #0874c5;
+    --color-dodger-blue-900: #0d629b;
+    --color-dodger-blue-950: #0e3b5d;
+}
+
+body {
+    @apply bg-linear-150/hsl from-gray-300 from-20% via-gray-400 via-70% to-gray-200;
+}
+
+.main-title {
+    @apply font-lubrifont text-gray-700 text-6xl uppercase font-bold my-6;
+}

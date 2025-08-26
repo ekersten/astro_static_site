@@ -7,54 +7,48 @@ import { getCollection } from "astro:content"
 const characters = await getCollection("characters")
 ---
 
-<Layout title="Characters">
-  <h1
-    class="transition-all relative duration-300 ease-in-out text-6xl font-bold text-shadow-lg py-5 pl-2 mb-5 text-sky-600 hover:text-green-700 bottom-0 hover:bottom-2"
-  >
-    Characters
-  </h1>
+<Layout
+  title="Characters"
+  description="List of characters of the Rick and Morty universe"
+>
+  <h1 class="main-title">Characters</h1>
   <ul class="character-list">
     {
       characters.map((character) => (
         <li class="character-item">
           <Image
             src={character.data.image}
-            alt={character.data.name}
+            alt=""
             width={50}
             height={50}
             inferSize
-            class="character-image"
+            class="character-image m-0.5"
+            transition:name={`img-${character.id}`}
           />
-          <a href={`/characters/${character.id}`}>{character.data.name}</a>
+          <a
+            href={`/characters/${character.id}`}
+            title={`${character.data.name} biography`}
+          >
+            {character.data.name}
+          </a>
         </li>
       ))
     }
   </ul>
 </Layout>
 
-<style>
+<style lang="postcss">
+  @reference "../../styles/global.css";
+  
   .character-list {
-    list-style: none;
-    padding: 0;
+    @apply list-none p-0 flex flex-wrap;
   }
 
   .character-item {
-    display: flex;
-    align-items: center;
-    margin-bottom: 1rem;
+    @apply flex items-center mb-4 bg-white border-2 border-gray-200 mx-2 pr-4 rounded-sm relative bottom-0 hover:shadow-lg hover:bottom-1 hover:border-gray-400 transition-all duration-200;
   }
 
   .character-image {
-    border-radius: 0.4rem;
-    margin-right: 1rem;
-  }
-
-  a {
-    text-decoration: none;
-    color: var(--color-primary);
-  }
-
-  a:hover {
-    text-decoration: underline;
+    @apply rounded-sm mr-4;
   }
 </style>
