@@ -11,6 +11,9 @@ const characters = await getCollection("characters")
   title="Characters"
   description="List of characters of the Rick and Morty universe"
 >
+  <nav class="nav-links">
+    <a href="/" class="font-lubrifont text-gray-600 relative left-0 hover:underline hover:left-1 transition-all duration-200">← Home</a>
+  </nav>
   <h1 class="main-title">Characters</h1>
   <ul class="character-list">
     {
@@ -50,5 +53,9 @@ const characters = await getCollection("characters")
 
   .character-image {
     @apply rounded-sm mr-4;
+  }
+
+  .nav-links {
+    @apply mb-4;
   }
 </style>

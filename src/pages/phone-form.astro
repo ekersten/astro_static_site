@@ -4,6 +4,9 @@ import Layout from "../layouts/Layout.astro"
 
 <Layout>
   <main>
+    <nav class="nav-links">
+      <a href="/" class="home-link">← Home</a>
+    </nav>
     <h1>Phone Number Notification</h1>
     <p>Enter a phone number to send an email notification:</p>
 
@@ -118,6 +121,23 @@ import Layout from "../layouts/Layout.astro"
     background-color: #d1ecf1;
     color: #0c5460;
     border: 1px solid #bee5eb;
+  }
+
+  .nav-links {
+    margin-bottom: 1.5rem;
+  }
+
+  .home-link {
+    color: #4b5563; /* text-gray-600 equivalent */
+    text-decoration: none;
+    position: relative;
+    left: 0;
+    transition: all 0.2s;
+  }
+
+  .home-link:hover {
+    text-decoration: underline;
+    left: 4px; /* hover:left-1 equivalent (4px) */
   }
 </style>
 

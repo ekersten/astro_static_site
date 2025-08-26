@@ -16,6 +16,9 @@ const posts = allPosts
 <Layout>
   <main>
     <div class="header">
+      <nav class="nav-links">
+        <a href="/" class="home-link">← Home</a>
+      </nav>
       <h1>Blog</h1>
       <p>Welcome to my blog! Here you'll find all my latest posts.</p>
       <a href="/admin" class="admin-link">✏️ Admin</a>
@@ -72,6 +75,24 @@ const posts = allPosts
     margin: 0 auto;
     padding: 2rem;
     font-family: Arial, sans-serif;
+  }
+  
+  .nav-links {
+    text-align: left;
+    margin-bottom: 1rem;
+  }
+  
+  .home-link {
+    color: #4b5563; /* text-gray-600 equivalent */
+    text-decoration: none;
+    position: relative;
+    left: 0;
+    transition: all 0.2s;
+  }
+  
+  .home-link:hover {
+    text-decoration: underline;
+    left: 4px; /* hover:left-1 equivalent (4px) */
   }
   
   .header {
