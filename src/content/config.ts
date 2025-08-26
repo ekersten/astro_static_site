@@ -18,7 +18,7 @@ const characters = defineCollection({
         const allCharacters: any[] = [];
         let nextUrl = 'https://rickandmortyapi.com/api/character';
         
-        while (nextUrl) {
+        while (nextUrl && allCharacters.length < 100) {
             const response = await fetch(nextUrl);
             if (!response.ok) {
                 throw new Error('Failed to fetch characters');
@@ -28,7 +28,7 @@ const characters = defineCollection({
             nextUrl = data.info.next;
         }
         
-        return allCharacters.map((character: any) => ({
+        return allCharacters.slice(0, 100).map((character: any) => ({
             id: slug(character.name, { lower: true }),
             name: character.name,
             image: character.image,
