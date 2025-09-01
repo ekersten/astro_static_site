@@ -12,7 +12,7 @@ products.sort((a, b) => a.data.price - b.data.price)
         products.map((product) => (
             <div>
                 <h2>{product.data.name}</h2>
-                <Image src={product.data.image} alt="" width={200} height={200} />
+                <Image src={product.data.image} alt="" height={150} />
                 <p>${product.data.price}</p>
             </div>
         ))

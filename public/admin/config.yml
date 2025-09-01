@@ -1,6 +1,5 @@
-local_backend: true
 backend:
-  name: "git_gateway" # The name of the backend
+  name: "github" # The name of the backend
   repo: "ekersten/astro_static_site" # The repository where the content
   branch: master # Branch to update (optional; defaults to master)
   base_url: "https://astro-static-site-s3a28.ondigitalocean.app" # Base URL for the GitHub API
