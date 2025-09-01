@@ -7,37 +7,34 @@ import { getCollection } from "astro:content"
 const characters = await getCollection("characters")
 ---
 
-<Layout
-  title="Characters"
-  description="List of characters of the Rick and Morty universe"
->
-  <nav class="nav-links">
-    <a href="/" class="font-lubrifont text-gray-600 relative left-0 hover:underline hover:left-1 transition-all duration-200">← Home</a>
-  </nav>
-  <h1 class="main-title">Characters</h1>
-  <ul class="character-list">
-    {
-      characters.map((character) => (
-        <li class="character-item">
-          <Image
-            src={character.data.image}
-            alt=""
-            width={50}
-            height={50}
-            inferSize
-            class="character-image m-0.5"
-            transition:name={`img-${character.id}`}
-          />
-          <a
-            href={`/characters/${character.id}`}
-            title={`${character.data.name} biography`}
-          >
-            {character.data.name}
-          </a>
-        </li>
-      ))
-    }
-  </ul>
+<Layout title="Characters" description="List of characters of the Rick and Morty universe">
+    <nav class="nav-links">
+        <a
+            href="/"
+            class="font-lubrifont text-gray-600 relative left-0 hover:underline hover:left-1 transition-all duration-200"
+            >← Home</a
+        >
+    </nav>
+    <h1 class="main-title">Characters</h1>
+    <ul class="character-list">
+        {
+            characters.map((character) => (
+                <li class="character-item">
+                    <Image
+                        src={character.data.image}
+                        alt=""
+                        width={50}
+                        height={50}
+                        class="character-image m-0.5"
+                        transition:name={`img-${character.id}`}
+                    />
+                    <a href={`/characters/${character.id}`} title={`${character.data.name} biography`}>
+                        {character.data.name}
+                    </a>
+                </li>
+            ))
+        }
+    </ul>
 </Layout>
 
 <style lang="postcss">
