@@ -13,11 +13,19 @@ const blog = defineCollection({
     }),
 });
 
+const products = defineCollection({
+    schema: ({ image }) => z.object({
+        name: z.string(),
+        price: z.number(),
+        image: image()
+    })
+})
+
 const characters = defineCollection({
     loader: async () => {
         const allCharacters: any[] = [];
         let nextUrl = 'https://rickandmortyapi.com/api/character';
-        
+
         while (nextUrl && allCharacters.length < 100) {
             const response = await fetch(nextUrl);
             if (!response.ok) {
@@ -27,7 +35,7 @@ const characters = defineCollection({
             allCharacters.push(...data.results);
             nextUrl = data.info.next;
         }
-        
+
         return allCharacters.slice(0, 100).map((character: any) => ({
             id: slug(character.name, { lower: true }),
             name: character.name,
@@ -43,7 +51,7 @@ const characters = defineCollection({
     schema: ({ image }) => z.object({
         id: z.string(),
         name: z.string(),
-        image: image(),
+        image: z.string(),
         species: z.string(),
         status: z.string(),
         origin: z.string(),
@@ -52,5 +60,5 @@ const characters = defineCollection({
 })
 
 export const collections = {
-    blog, characters
+    blog, characters, products
 };

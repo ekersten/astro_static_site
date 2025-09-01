@@ -1,5 +1,6 @@
+local_backend: true
 backend:
-  name: "github" # The name of the backend
+  name: "git_gateway" # The name of the backend
   repo: "ekersten/astro_static_site" # The repository where the content
   branch: master # Branch to update (optional; defaults to master)
   base_url: "https://astro-static-site-s3a28.ondigitalocean.app" # Base URL for the GitHub API
@@ -8,8 +9,8 @@ backend:
 # Uncomment below to enable drafts
 # publish_mode: editorial_workflow
 
-media_folder: "public/images/uploads" # Media files will be stored in the repo under public/images/uploads
-public_folder: "/images/uploads" # The src attribute for uploaded media will begin with /images/uploads
+media_folder: "src/assets/uploads" # Media files will be stored in the repo under public/images/uploads
+public_folder: "/src/assets/uploads" # The src attribute for uploaded media will begin with /images/uploads
 
 collections:
   - name: "blog" # Used in routes, e.g., /admin/collections/blog
@@ -25,3 +26,14 @@ collections:
       - { label: "Body", name: "body", widget: "markdown" }
       - { label: "Tags", name: "tags", widget: "list", required: false }
       - { label: "Published", name: "published", widget: "boolean", default: true }
+  - name: "products"
+    label: "Products"
+    label_singular: "Product"
+    create: true
+    slug: "{{name}}"
+    folder: "src/content/products"
+    fields:
+      - { label: "Name", name: "name", widget: "string" }
+      - { label: "Price", name: "price", hint: "$", widget: "number", value_type: "int", min: 1 }
+      - { label: "Image", name: "image", widget: "image", required: true }
+      - { label: "Description", name: "body", widget: "markdown" }

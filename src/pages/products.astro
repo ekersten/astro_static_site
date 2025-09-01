@@ -1,0 +1,20 @@
+---
+import { getCollection } from "astro:content"
+import Layout from "../layouts/Layout.astro"
+import { Image } from "astro:assets"
+const products = await getCollection("products")
+products.sort((a, b) => a.data.price - b.data.price)
+---
+
+<Layout>
+    <h1>Products</h1>
+    {
+        products.map((product) => (
+            <div>
+                <h2>{product.data.name}</h2>
+                <Image src={product.data.image} alt="" width={200} height={200} />
+                <p>${product.data.price}</p>
+            </div>
+        ))
+    }
+</Layout>
